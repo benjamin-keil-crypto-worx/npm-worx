@@ -5,7 +5,7 @@ name: LogSmith CI
 
 on:
   push:
-    branches: [ "feature/*-logSmith*","release/logSmith*","bugfix/*-logSmith*" ]
+    branches: [ "feature/*","release/*","bugfix/* ]
 
 jobs:
   build:
