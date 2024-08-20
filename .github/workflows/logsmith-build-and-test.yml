@@ -21,13 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Move defaults after checkout
-      - run: cd ./logsmith
-      - run: ls -la
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm' 
       - run: npm ci
+        working-directory: ./logsmith
       - run: npm run unitTest
+        working-directory: ./logsmith
       - run: npm run bddTestgit pull
+        working-directory: ./logsmith
