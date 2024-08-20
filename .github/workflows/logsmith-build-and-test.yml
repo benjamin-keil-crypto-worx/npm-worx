@@ -12,6 +12,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./logsmith
+
     strategy:
       matrix:
         node-version: [18.x, '20.x']
@@ -23,8 +27,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: cd logsmith    
+          cache: 'npm' 
       - run: npm ci
       - run: npm run unitTest
       - run: npm run bddTestgit pull
