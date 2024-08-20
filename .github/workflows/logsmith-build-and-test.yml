@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Move defaults after checkout
-      - run: cd logsmith
+      - run: cd ./logsmith
       - run: ls -la
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
