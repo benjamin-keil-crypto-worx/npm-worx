@@ -17,13 +17,11 @@ jobs:
         node-version: [18.x, '20.x']
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-    defaults:
-      run:
-        working-directory: ./logsmith
+   
     steps:
       - uses: actions/checkout@v3
       # Move defaults after checkout
-      
+      - run: cd logsmith
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
