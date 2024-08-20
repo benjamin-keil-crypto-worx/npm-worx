@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm' 
-          working-directory: ./logsmith
-      - run: npm ci
-      - run: npm run unitTest
-      - run: npm run bddTestgit pull
+      - run: cd logsmith && npm ci
+      - run: cd logsmith && npm run unitTest
+      - run: cd logsmith && npm run bddTestgit
