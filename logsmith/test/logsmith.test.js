@@ -1,6 +1,6 @@
 const mockfs = require('mock-fs');
-const {LogSmith} = require("../LogSmith");
-const {format} = require("date-fns")
+const {LogSmith} = require("../index");
+
 const fs = require("fs");
 const path = require("path")
 const {testOptions} = require("./resources/testOptions")

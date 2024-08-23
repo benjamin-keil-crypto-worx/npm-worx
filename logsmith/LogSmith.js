@@ -72,6 +72,9 @@ class LogSmith {
          *   }
          */
        
+        if(options.flushInterval >0 && options.flushInterval< 1000 ) {
+            options.flushInterval = 0;
+        }
         LogSmith.dateFormat    = options.dateFormat || "yyyy-MM-dd";
         LogSmith.filePath      = options.filePath  || __dirname;
         LogSmith.logToFile     = options.logToFile || false
@@ -83,6 +86,7 @@ class LogSmith {
         this.interval =null;
 
         if(LogSmith.flushInterval >= 1000 && LogSmith.logToFile) {
+            this.setupExitHandlers()
             this.flushSetup();
         }
 
@@ -111,12 +115,17 @@ class LogSmith {
     }
 
     clearLogInterval(){
-        clearInterval(this.interval);
+        try{
+            clearInterval(this.interval);
+        } catch(e) {
+            console.log( "No Interval available !")
+        }
+        
         this.flushLogs();
     }
     async flushLogs() {
         if (LogSmith.logQueue.length === 0) return;
-        const logEntries = LogSmith.logQueue.join('');
+        const logEntries = LogSmith.logQueue.join('\n');
         let currentDate = this.formatDate(new Date(), "yyyy-MM-dd");
         const logFilePath = path.join(LogSmith.filePath || __dirname, currentDate+"-"+LogSmith.fileName || `logSmith.${currentDate}.log`);
         
@@ -136,9 +145,12 @@ class LogSmith {
     }
     
      flushSetup(){
+        
         if(getBooleanEnvValue(LogSmith.logToFile)) {
             this.interval = setInterval(() => {
-                this.flushLogs();
+                if(LogSmith.logQueue.length >= LogSmith.batchSize){
+                    this.flushLogs();
+                }
             }, LogSmith.flushInterval || 5000);
         }
     }
@@ -183,7 +195,8 @@ class LogSmith {
     // Method to handle log and cleanup
     cleanup() {
         console.log(`${this.formatDate(new Date()).white} ${"Warn".yellow} (${process.pid.toString().white}) ${LogSmith.sanitize("Process Exit Flushing Logs!").gray}`);
-        this.flushLogs();
+        LogSmith.batchSize = 0;
+        this.clearLogInterval();
     }
     setupExitHandlers() {
         process.on('exit', () => this.cleanup());
@@ -191,7 +204,10 @@ class LogSmith {
         // Optionally handle other signals like SIGINT (Ctrl+C) and SIGTERM
         const handleSignal = () => {
           this.cleanup();
-          process.exit(); // Ensure the process exits after cleanup
+          setTimeout(()=>{
+            process.exit();
+          }, 3000);
+           // Ensure the process exits after cleanup
         };
         process.on('SIGINT', handleSignal);
         process.on('SIGTERM', handleSignal);
@@ -200,5 +216,5 @@ class LogSmith {
 
 module.exports = {
     LogSmith:LogSmith,
-    logSmith:LogSmith.initialize
+    log:LogSmith.initialize
 };
