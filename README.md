@@ -3,5 +3,5 @@
 
 ## Current Packages (WIP) 
 
-* LogSmith (Simple and easy to use Logging utility )
-* RepoMan (Mongoose Schema and Repository Scaffold utility )
+* LogSmith _(Simple and easy to use Logging utility )_
+* OneMSR  _(Mongoose Schema and Repository Scaffold utility )_
