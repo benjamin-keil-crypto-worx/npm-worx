@@ -1,6 +1,6 @@
-let {SimpleLog} = require("../SimpleLog");
+let {L4js} = require("../l4js");
 
-let logger = SimpleLog.initialize({
+let logger = L4js.initialize({
     dateFormat:"yyyy-MM-dd",
     filePath:__dirname,
     logLevel:"*",

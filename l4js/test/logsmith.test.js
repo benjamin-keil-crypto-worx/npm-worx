@@ -1,5 +1,5 @@
 const mockfs = require('mock-fs');
-const {SimpleLog} = require("../index");
+const {L4js} = require("../index");
 
 const fs = require("fs");
 const path = require("path")
@@ -14,7 +14,7 @@ describe('Logger Class', () => {
     it('should log all messaged to console', () => {
         // Spy on console.log
         const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-        const logger = SimpleLog.initialize(testOptions.logAllNoFileWrite)
+        const logger = L4js.initialize(testOptions.logAllNoFileWrite)
         logger.info("Test Log Info Message");
         logger.warn("Test Warn Message");
         logger.debug("Test Debug Message");
@@ -32,7 +32,7 @@ describe('Logger Class', () => {
     it('should log only debug and error messages to console', () => {
         // Spy on console.log
         const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-        const logger = SimpleLog.initialize(testOptions.logDebugNoFileWrite);
+        const logger = L4js.initialize(testOptions.logDebugNoFileWrite);
     
         logger.info("Test Log Info Message");
         expect(consoleSpy).not.toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('Logger Class', () => {
     it('should log only info  to console', () => {
         // Spy on console.log
         const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-        const logger = SimpleLog.initialize(testOptions.logInfoNoFileWrite);
+        const logger = L4js.initialize(testOptions.logInfoNoFileWrite);
     
         logger.debug("Test Debug Message");
         expect(consoleSpy).not.toHaveBeenCalled();
@@ -81,7 +81,7 @@ describe('Logger Class', () => {
     it('should log only warning to console', () => {
         // Spy on console.log
         const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-        const logger = SimpleLog.initialize(testOptions.logWarnNoFileWrite);
+        const logger = L4js.initialize(testOptions.logWarnNoFileWrite);
     
         logger.debug("Test Debug Message");
         expect(consoleSpy).not.toHaveBeenCalled();
@@ -106,7 +106,7 @@ describe('Logger Class', () => {
     it('should log only errors to console', () => {
         // Spy on console.log
         const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-        const logger = SimpleLog.initialize(testOptions.logErrorNoFileWrite);
+        const logger = L4js.initialize(testOptions.logErrorNoFileWrite);
     
         logger.debug("Test Debug Message");
         expect(consoleSpy).not.toHaveBeenCalled();
@@ -125,34 +125,34 @@ describe('Logger Class', () => {
     it('it should  call flushLog for all Console logs', () => {
          
         
-         const logger = SimpleLog.initialize(testOptions.logAllWithFileWrite);
-        // Spy on SimpleLog
-        const SimpleLogSpy = jest.spyOn(logger, 'flushLogs').mockImplementation();
+         const logger = L4js.initialize(testOptions.logAllWithFileWrite);
+        // Spy on L4js
+        const L4jsSpy = jest.spyOn(logger, 'flushLogs').mockImplementation();
         logger.error(new Error("Error Message")) 
         logger.warn("Test Warn Message");
         logger.info("Test Warn Message");
         logger.debug("Test Warn Message");
 
         // Check how many times it was called
-        expect(SimpleLogSpy).toHaveBeenCalledTimes(4);
+        expect(L4jsSpy).toHaveBeenCalledTimes(4);
     });
     it('it should  call flushLog one after six 7 time logging', () => {
        
-       SimpleLog.clearLogs();
-       const logger = SimpleLog.initialize(testOptions.logAllWithFileWriteAndFlushSize);
-       // Spy on SimpleLog
-       const SimpleLogSpy = jest.spyOn(logger, 'flushLogs').mockImplementation();
+       L4js.clearLogs();
+       const logger = L4js.initialize(testOptions.logAllWithFileWriteAndFlushSize);
+       // Spy on L4js
+       const L4jsSpy = jest.spyOn(logger, 'flushLogs').mockImplementation();
        logger.error(new Error("Error Message")) 
        logger.warn("Test Warn Message");
        logger.info("Test Warn Message");
        logger.debug("Test Warn Message");
        logger.warn("Test Warn Message");
        logger.info("Test Warn Message");
-       SimpleLog.clearLogs();
+       L4js.clearLogs();
        logger.debug("Test Warn Message");
 
        // Check how many times it was called
-       expect(SimpleLogSpy).toHaveBeenCalledTimes(1);
+       expect(L4jsSpy).toHaveBeenCalledTimes(1);
    });
 });
 
