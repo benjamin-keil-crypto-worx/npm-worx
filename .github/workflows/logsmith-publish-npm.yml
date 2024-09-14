@@ -25,15 +25,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: ./simpleLog/package-lock.json
+          cache-dependency-path: ./l4js/package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./L4js
+        working-directory: ./l4js
 
       - name: Run Unit Test
         run: npm run unitTest
-        working-directory: ./L4js
+        working-directory: ./l4js
 
   publish-npm:
     needs: build
@@ -46,6 +46,6 @@ jobs:
             registry-url: https://registry.npmjs.org/
         - name: Publish To NPM    
           run: npm publish
-          working-directory: ./simpleLog
+          working-directory: ./l4js
           env:
             NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
