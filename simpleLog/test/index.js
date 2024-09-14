@@ -1,6 +1,6 @@
-let {LogSmith} = require("../LogSmith");
+let {SimpleLog} = require("../SimpleLog");
 
-let logger = LogSmith.initialize({
+let logger = SimpleLog.initialize({
     dateFormat:"yyyy-MM-dd",
     filePath:__dirname,
     logLevel:"*",
