@@ -24,6 +24,7 @@ $ npm install simple-log@latest
 
 
 Import The Library into project or app.
+
 ```js
 
 /* Import simpleLog into your Application */
@@ -32,7 +33,7 @@ let {SimpleLog} = require("SimpleLog");
 ```
 
 
-Create a options of configuration Object
+Create an options or configuration Object
 
 ```js
 
