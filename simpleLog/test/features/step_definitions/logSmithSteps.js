@@ -1,21 +1,21 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const {assert} = require('chai');
 const {testOptions} = require("../../resources/testOptions");
-let {LogSmith} = require('../../../LogSmith');
+let {SimpleLog} = require('../../../SimpleLog');
 let logger = null;
 
-Given('A User create a new instance of a LogSmith logger with {string}', ( configKey ) =>{
+Given('A User create a new instance of a SimpleLog logger with {string}', ( configKey ) =>{
    let options = testOptions[configKey]
-   logger = LogSmith.initialize(options)   
+   logger = SimpleLog.initialize(options)   
 });
 
 Then('All Static fields should have the values as provided by {string} and the Date Format should be {string}', ( configKey, dateFormat ) =>{
     let options = testOptions[configKey]
-    assert.equal(dateFormat, LogSmith.dateFormat);
-    assert.equal(options.logToFile, LogSmith.logToFile);
-    assert.equal(options.fileName, LogSmith.fileName);
-    assert.equal(options.batchSize, LogSmith.batchSize);
-    assert.equal(options.flushInterval, LogSmith.flushInterval);
+    assert.equal(dateFormat, SimpleLog.dateFormat);
+    assert.equal(options.logToFile, SimpleLog.logToFile);
+    assert.equal(options.fileName, SimpleLog.fileName);
+    assert.equal(options.batchSize, SimpleLog.batchSize);
+    assert.equal(options.flushInterval, SimpleLog.flushInterval);
 });
 
 Then('we log messages {int} times', ( times ) =>{
@@ -26,7 +26,7 @@ Then('we log messages {int} times', ( times ) =>{
 
 Then('the log queue should be clear after we waited {int} seconds', (waiTime) =>{
     setTimeout(()=>{
-        assert.equal(LogSmith.logQueue, 0);
+        assert.equal(SimpleLog.logQueue, 0);
     }, waiTime)
 });
 

@@ -1,11 +1,13 @@
 {
-  "name": "logsmith",
+  "name": "simple-log",
   "version": "1.0.0",
   "description": "Tiny but Impressive Logging for Modern JavaScript Applications ",
   "main": "index.js",
   "scripts": {
     "unitTest": "npx jest",
-    "bddTest": "cucumber-js"
+    "bddTest": "cucumber-js",
+    "sandbox":"node test/index.js",
+    "test": "npm run unitTest && npm run bddTest"
   },
   "keywords": [
     "Log",
