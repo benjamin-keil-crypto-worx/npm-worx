@@ -12,7 +12,7 @@ const  getBooleanEnvValue = (envVar)  =>{
     }
     return false;
 }
-class SimpleLog {
+class L4js {
 
     static logQueue = [];
     static dateFormat = "yyyy-MM-dd";
@@ -23,7 +23,7 @@ class SimpleLog {
     static flushInterval = null;
 
     static clearLogs() {
-        SimpleLog.logQueue = [];
+        L4js.logQueue = [];
     }
 
     static sanitize( msg ){
@@ -40,7 +40,7 @@ class SimpleLog {
     }
 
     static initialize( options = {} ){
-        return new SimpleLog( options);
+        return new L4js( options);
     }
     
     constructor(options = {}) {
@@ -58,7 +58,7 @@ class SimpleLog {
          *  filePath    // The Log File Path
          *  logToFile   // wether to log to a files
          *  logLevel    // Log level *, info, warn, error, debug default: * enables all log levels
-         *  filename    // the file name : default (SimpleLog.(yyyy-mm-dd).log)
+         *  filename    // the file name : default (L4js.(yyyy-mm-dd).log)
          *  batchSize   // The batch Size of queued logs
          *  flushInterval // The Interval or seconds for each log write 
          * 
@@ -75,17 +75,17 @@ class SimpleLog {
         if(options.flushInterval >0 && options.flushInterval< 1000 ) {
             options.flushInterval = 0;
         }
-        SimpleLog.dateFormat    = options.dateFormat || "yyyy-MM-dd";
-        SimpleLog.filePath      = options.filePath  || __dirname;
-        SimpleLog.logToFile     = options.logToFile || false
-        SimpleLog.logLevel      = options.logLevel || "*"
-        SimpleLog.fileName      = options.fileName || null
-        SimpleLog.batchSize     = options.batchSize || 0
-        SimpleLog.flushInterval = options.flushInterval || 0
+        L4js.dateFormat    = options.dateFormat || "yyyy-MM-dd";
+        L4js.filePath      = options.filePath  || __dirname;
+        L4js.logToFile     = options.logToFile || false
+        L4js.logLevel      = options.logLevel || "*"
+        L4js.fileName      = options.fileName || null
+        L4js.batchSize     = options.batchSize || 0
+        L4js.flushInterval = options.flushInterval || 0
 
         this.interval =null;
 
-        if(SimpleLog.flushInterval >= 1000 && SimpleLog.logToFile) {
+        if(L4js.flushInterval >= 1000 && L4js.logToFile) {
             this.setupExitHandlers()
             this.flushSetup();
         }
@@ -94,9 +94,9 @@ class SimpleLog {
     }
 
     writeLog(logEntry, logPrefix) {
-        if(getBooleanEnvValue( SimpleLog.logToFile )){
-            SimpleLog.logQueue.push(`${logPrefix}  ${logEntry}`);
-            if (SimpleLog.logQueue.length >= SimpleLog.batchSize && SimpleLog.flushInterval < 1000 ) {
+        if(getBooleanEnvValue( L4js.logToFile )){
+            L4js.logQueue.push(`${logPrefix}  ${logEntry}`);
+            if (L4js.logQueue.length >= L4js.batchSize && L4js.flushInterval < 1000 ) {
                 this.flushLogs();
             }
         }
@@ -124,10 +124,10 @@ class SimpleLog {
         this.flushLogs();
     }
     async flushLogs() {
-        if (SimpleLog.logQueue.length === 0) return;
-        const logEntries = SimpleLog.logQueue.join('\n');
+        if (L4js.logQueue.length === 0) return;
+        const logEntries = L4js.logQueue.join('\n');
         let currentDate = this.formatDate(new Date(), "yyyy-MM-dd");
-        const logFilePath = path.join(SimpleLog.filePath || __dirname, currentDate+"-"+SimpleLog.fileName || `SimpleLog.${currentDate}.log`);
+        const logFilePath = path.join(L4js.filePath || __dirname, currentDate+"-"+L4js.fileName || `L4js.${currentDate}.log`);
         
         try {
             const directory = path.dirname(logFilePath);
@@ -135,67 +135,67 @@ class SimpleLog {
                 fs.mkdirSync(directory, { recursive: true });
             }
             await this.writeFile(logFilePath, logEntries)
-            SimpleLog.logQueue =[];
+            L4js.logQueue =[];
             
         } catch (error) {
             console.error('Failed to write log:', error);
             // Re-add entries to the queue to retry on next flush
-            SimpleLog.logQueue.unshift(...logEntries.split('\n').filter(Boolean).map(entry => entry + '\n'));
+            L4js.logQueue.unshift(...logEntries.split('\n').filter(Boolean).map(entry => entry + '\n'));
         }
     }
     
      flushSetup(){
         
-        if(getBooleanEnvValue(SimpleLog.logToFile)) {
+        if(getBooleanEnvValue(L4js.logToFile)) {
             this.interval = setInterval(() => {
-                if(SimpleLog.logQueue.length >= SimpleLog.batchSize){
+                if(L4js.logQueue.length >= L4js.batchSize){
                     this.flushLogs();
                 }
-            }, SimpleLog.flushInterval || 5000);
+            }, L4js.flushInterval || 5000);
         }
     }
 
     formatDate(date, formatString  ="yyyy-MM-dd") {
-        return format(date, SimpleLog.dateFormat || formatString);
+        return format(date, L4js.dateFormat || formatString);
     }
 
     info( msg ){
-        if(["*", "info"].includes(SimpleLog.logLevel)){
-            console.log(`${this.formatDate(new Date()).white} ${"INFO".cyan} (${process.pid.toString().white}) ${SimpleLog.sanitize(msg).gray}`);
-            this.writeLog(SimpleLog.sanitize(msg), `${this.formatDate(new Date())} ${"INFO"} (${process.pid.toString()})`);
+        if(["*", "info"].includes(L4js.logLevel)){
+            console.log(`${this.formatDate(new Date()).white} ${"INFO".cyan} (${process.pid.toString().white}) ${L4js.sanitize(msg).gray}`);
+            this.writeLog(L4js.sanitize(msg), `${this.formatDate(new Date())} ${"INFO"} (${process.pid.toString()})`);
         }
     }
 
     warn( msg ){
-        if(["*", "warn"].includes(SimpleLog.logLevel)){
-            console.log(`${this.formatDate(new Date()).white} ${"WARN".yellow} (${process.pid.toString().white}) ${SimpleLog.sanitize(msg).gray}`);
-            this.writeLog(SimpleLog.sanitize(msg),`${this.formatDate(new Date())} ${"WARN"} (${process.pid.toString()})`);
+        if(["*", "warn"].includes(L4js.logLevel)){
+            console.log(`${this.formatDate(new Date()).white} ${"WARN".yellow} (${process.pid.toString().white}) ${L4js.sanitize(msg).gray}`);
+            this.writeLog(L4js.sanitize(msg),`${this.formatDate(new Date())} ${"WARN"} (${process.pid.toString()})`);
         }
     }
 
     debug( msg ){
-        if(["*", "debug"].includes(SimpleLog.logLevel)){
-            console.log(`${this.formatDate(new Date()).white} ${"DEBUG".green} (${process.pid.toString().white}) ${SimpleLog.sanitize(msg).gray}`);
-            this.writeLog(SimpleLog.sanitize(msg), `${this.formatDate(new Date())} ${"DEBUG"} (${process.pid.toString()})`);
+        if(["*", "debug"].includes(L4js.logLevel)){
+            console.log(`${this.formatDate(new Date()).white} ${"DEBUG".green} (${process.pid.toString().white}) ${L4js.sanitize(msg).gray}`);
+            this.writeLog(L4js.sanitize(msg), `${this.formatDate(new Date())} ${"DEBUG"} (${process.pid.toString()})`);
         }
     }
 
     error( msg, error ){ 
-        if(["*", "error", "debug"].includes(SimpleLog.logLevel)){
+        if(["*", "error", "debug"].includes(L4js.logLevel)){
             console.log(`${this.formatDate(new Date()).white} ${"ERROR".red} (${process.pid.toString().white})`)
             if(msg){
-                console.log(`${SimpleLog.sanitize(msg).gray}`);
-                this.writeLog(SimpleLog.sanitize(msg), `${this.formatDate(new Date())} ${"ERROR"} (${process.pid.toString()})`);
+                console.log(`${L4js.sanitize(msg).gray}`);
+                this.writeLog(L4js.sanitize(msg), `${this.formatDate(new Date())} ${"ERROR"} (${process.pid.toString()})`);
             }if(error){
-                console.log(`${SimpleLog.sanitize(error).gray}`)
-                this.writeLog(SimpleLog.sanitize(error), `${this.formatDate(new Date())} ${"ERROR"} (${process.pid.toString()})`);
+                console.log(`${L4js.sanitize(error).gray}`)
+                this.writeLog(L4js.sanitize(error), `${this.formatDate(new Date())} ${"ERROR"} (${process.pid.toString()})`);
             }
         }
     }
     // Method to handle log and cleanup
     cleanup() {
-        console.log(`${this.formatDate(new Date()).white} ${"Warn".yellow} (${process.pid.toString().white}) ${SimpleLog.sanitize("Process Exit Flushing Logs!").gray}`);
-        SimpleLog.batchSize = 0;
+        console.log(`${this.formatDate(new Date()).white} ${"Warn".yellow} (${process.pid.toString().white}) ${L4js.sanitize("Process Exit Flushing Logs!").gray}`);
+        L4js.batchSize = 0;
         this.clearLogInterval();
     }
     setupExitHandlers() {
@@ -215,6 +215,6 @@ class SimpleLog {
 }
 
 module.exports = {
-    SimpleLog:SimpleLog,
-    log:SimpleLog.initialize
+    L4js:L4js,
+    log:L4js.initialize
 };

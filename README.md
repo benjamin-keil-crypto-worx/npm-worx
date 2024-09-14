@@ -3,5 +3,5 @@
 
 ## Current Packages (WIP) 
 
-* simple-log _(Simple and easy to use Logging utility )_
+* L4js _(Simple and easy to use Logging utility )_
 * OneMSR  _(Mongoose Schema and Repository Scaffold utility )_
